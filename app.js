@@ -3,10 +3,11 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let cron = require("node-cron");
-const { Client } = require('@notionhq/client');
+
 require('dotenv').config();
 
 let indexRouter = require('./routes/index');
+const notion = require("./services/notion");
 
 let app = express();
 
@@ -18,11 +19,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
-
-// Authenticate with the Notion API
-const notion = new Client({
-  auth: process.env.NOTION_API_KEY,
-});
 
 // Set the database ID and status property name
 const databaseId = process.env.DATABASE_ID;
@@ -68,6 +64,4 @@ async function updateTasks() {
 
 // Define a cron job to run the updateTasks function every day at 11PM
 cron.schedule("0 23 * * *'", updateTasks);
-console.log("LOG: ");
-console.log( process.env.NOTION_API_KEY,  process.env.DATABASE_ID)
 module.exports = app;
