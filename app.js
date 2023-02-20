@@ -63,5 +63,7 @@ async function updateTasks() {
 }
 
 // Define a cron job to run the updateTasks function every day at 11PM
-cron.schedule("0 23 * * *'", updateTasks);
+cron.schedule("0 23 * * *'", () => {
+  (updateTasks)();
+});
 module.exports = app;
